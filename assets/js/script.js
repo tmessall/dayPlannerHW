@@ -6,15 +6,25 @@ $(document).ready(function (){
         row.addClass("row time-block");
         var hour = $("<div>");
         hour.addClass("hour");
-        var timeBlock = $("<div>");
-        timeBlock.addClass("future textarea");
-        timeBlock.width("80%");
+        hour.width("5%");
+        var event = $("<textarea>");
+        event.addClass("textarea");
+        event.width("80%");
         var saveBtn = $("<button>");
         saveBtn.text("lock");
         saveBtn.addClass("saveBtn");
-        hour.text("AHHHH");
+        saveBtn.width("5%");
+        if (i < 12) {
+            hour.text(i + " AM");
+        } else if (i === 12) {
+            hour.text(i + " PM");
+        } else {
+            hour.text((i-12) + " PM");
+        }
+        event.attr("value", i);
+        saveBtn.attr("value", i);
         row.append(hour);
-        row.append(timeBlock);
+        row.append(event);
         row.append(saveBtn);
         planner.append(row);
     } 
