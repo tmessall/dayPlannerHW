@@ -3,7 +3,7 @@ $(document).ready(function (){
     var currentDay = $("#currentDay");
 
     // Keeps track of every event
-    var events = [];
+    var plannedEvents = [];
 
     // Sets current time into the variable
     var curTime = dayjs();
@@ -18,15 +18,15 @@ $(document).ready(function (){
         var hour = $("<div>");
         hour.addClass("hour");
         hour.width("5%");
-        var event = $("<textarea>");
+        var plannedEvent = $("<textarea>");
         // Needs to include check for if past, present, future, add class
-        event.addClass("textarea");
-        event.width("80%");
+        plannedEvent.addClass("textarea");
+        plannedEvent.width("80%");
         var saveBtn = $("<button>");
         saveBtn.text("save");
         saveBtn.addClass("saveBtn");
         saveBtn.width("5%");
-        // Adds a time to each hour
+        // Adds a time to show to each hour
         if (i < 3) {
             hour.text((i + 9) + " AM");
         } else if (i === 3) {
@@ -34,13 +34,24 @@ $(document).ready(function (){
         } else {
             hour.text((i-3) + " PM");
         }
+        // Sets a time for the block
+        var manipulated = curTime.startOf("day").add((i + 9), 'hour');
+        console.log(manipulated);
+        // Sets color
+        if (manipulated.isAfter(curTime)) {
+            plannedEvent.addClass("future")
+        } else if (manipulated.isSame(curTime.startOf("hour"))) {
+            plannedEvent.addClass("present");
+        } else {
+            plannedEvent.addClass("past");
+        }
         // Values are saved so that each event can be saved and accessed
-        event.attr("time", i);
-        events[i] = event;
+        plannedEvent.attr("time", i);
+        plannedEvents[i] = plannedEvent;
         saveBtn.attr("time", i);
         // Makes the row
         row.append(hour);
-        row.append(event);
+        row.append(plannedEvent);
         row.append(saveBtn);
         planner.append(row);
     }
@@ -51,7 +62,7 @@ $(document).ready(function (){
             var localEvent = localStorage.getItem(j);
             if (localEvent !== null) {
                 if (i === j) {
-                    events[i].val(localEvent);
+                    plannedEvents[i].val(localEvent);
                 }
                 
             }
@@ -61,10 +72,9 @@ $(document).ready(function (){
     // Saves event to local storage
     $(".saveBtn").click(function() {
         var time = $(this).attr("time");
-        for (var i = 0; i < events.length; i++) {
-            if (events[i].attr("time") === time) {
-                console.log("hey i work")
-                localStorage.setItem(i, events[i].val());
+        for (var i = 0; i < plannedEvents.length; i++) {
+            if (plannedEvents[i].attr("time") === time) {
+                localStorage.setItem(i, plannedEvents[i].val());
             }
         }
     })
