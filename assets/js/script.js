@@ -1,8 +1,15 @@
 $(document).ready(function (){
     var planner = $(".container");
+    var currentDay = $("#currentDay");
 
     // Keeps track of every event
     var events = [];
+
+    // Sets current time into the variable
+    var curTime = dayjs();
+    // Displays the time to the top of the page
+    var show = curTime.format("MMMM D YYYY");
+    currentDay.append(show);
 
     // Loops through, creates each row
     for (var i = 0; i < 9; i++) {
@@ -45,9 +52,6 @@ $(document).ready(function (){
             if (localEvent !== null) {
                 if (i === j) {
                     events[i].val(localEvent);
-                    console.log(i);
-                    console.log(j);
-                    console.log(typeof localEvent); 
                 }
                 
             }
